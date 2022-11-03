@@ -13,6 +13,22 @@ afterAll(async () => {
   });
 });
 
+describe('Tables exist within the database', () => {
+  const tableNames = Object.keys(db.models);
+
+  test('Table Board exists within the database', async () => {
+    expect(tableNames.includes('Board')).toBeTruthy();
+  });
+
+  test('Table Cheese exists within the database', async () => {
+    expect(tableNames.includes('Cheese')).toBeTruthy();
+  });
+
+  test('Table User exists within the database', async () => {
+    expect(tableNames.includes('User')).toBeTruthy();
+  });
+});
+
 describe('Can create multiple rows within the Board model/table', () => {
 
   beforeAll(async () => {
