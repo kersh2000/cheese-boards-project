@@ -1,16 +1,13 @@
 const { Board, Cheese, User } = require('../models/index');
 const db = require('../db/db');
+const Data = require('../db/data');
 
 beforeAll(async () => {
-  await db.sync({
-    force: true
-  });
+  await Data.new();
 });
 
 afterAll(async () => {
-  await db.sync({
-    force: true
-  });
+  await Data.reset();
 });
 
 describe('Tables exist within the database', () => {
@@ -33,7 +30,7 @@ describe('Can create multiple rows within the Board model/table', () => {
 
   beforeAll(async () => {
     await Board.create({
-      type: 'Blue cheese',
+      type: 'Blue cheeses',
       description: 'Choose from a wide variety of strong creamy blue cheeses!',
       rating: 7
     });
@@ -46,7 +43,7 @@ describe('Can create multiple rows within the Board model/table', () => {
 
   test('Name is successfully created within each row', async () => {
     const board = await Board.findOne();
-    expect(board.type).toBe('Blue cheese');
+    expect(board.type).toBe('Blue cheeses');
   });
 
   test('Description is successfully created within each row', async () => {
