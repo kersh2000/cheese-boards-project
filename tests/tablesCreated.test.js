@@ -1,12 +1,21 @@
 const { Board, Cheese, User } = require('../models/index');
 const db = require('../db/db');
 
+beforeAll(async () => {
+  await db.sync({
+    force: true
+  });
+});
+
+afterAll(async () => {
+  await db.sync({
+    force: true
+  });
+});
+
 describe('Can create multiple rows within the Board model/table', () => {
 
   beforeAll(async () => {
-    await db.sync({
-      force: true
-    });
     await Board.create({
       type: 'Blue cheese',
       description: 'Choose from a wide variety of strong creamy blue cheeses!',
@@ -60,9 +69,6 @@ describe('Can create multiple rows within the Board model/table', () => {
 describe('Can create multiple rows within the Cheese model/table', () => {
 
   beforeAll(async () => {
-    await db.sync({
-      force: true
-    });
     await Cheese.create({
       title: 'Camembert',
       description: 'Rich, buttery, and spreadable, Camembert has a mild, mushroomy aroma.'
@@ -112,9 +118,6 @@ describe('Can create multiple rows within the Cheese model/table', () => {
 describe('Can create multiple rows within the User model/table', () => {
 
   beforeAll(async () => {
-    await db.sync({
-      force: true
-    });
     await User.create({
       name: 'Sam Smith',
       email: 'password123@yahoo.co.uk'
