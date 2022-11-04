@@ -4,9 +4,11 @@
   "description": "A Sequelize DB for users to collect cheeses and place them on boards",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --coverage",
     "seed": "cd db && node seed.js",
-    "main": "cd src && node main.js"
+    "main": "cd src && node main.js",
+    "test:tablesCreated": "jest ./tests/tablesCreated --silent --runInBand --verbose",
+    "test:relationships": "jest ./tests/relationships --silent --runInBand --verbose"
   },
   "repository": {
     "type": "git",
