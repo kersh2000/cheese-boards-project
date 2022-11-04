@@ -15,7 +15,7 @@ async function seed() {
       rating: 9
     },
     {
-      type: 'Crumbly cheeses',
+      type: 'Soft cheeses',
       description: 'Goat and Feta Cheese.',
       rating: 4
     },
@@ -41,7 +41,7 @@ async function seed() {
     },
     {
       title: 'Gorgonzola',
-      description: 'Gorgonzola is one of the worlds oldest types of blue cheese. It has a crumbly and soft texture, and its taste can range from creamy to sharp.'
+      description: 'Gorgonzola is one of the worlds oldest types of blue cheese. It has a soft and soft texture, and its taste can range from creamy to sharp.'
     },
     {
       title: 'Mascarpone',
@@ -50,6 +50,14 @@ async function seed() {
     {
       title: 'Parmesan',
       description: 'Parmesan has a hard, gritty texture and tastes fruity and nutty. It can be grated over pastas, used in soups and more.'
+    },
+    {
+      title: 'Provolone',
+      description: 'Provolone is an Italian cheese. It is an aged pasta filata (stretched-curd) cheese originating in Campania near Vesuvius, where it is still produced in many shapes.'
+    },
+    {
+      title: 'Smoked Cheddar',
+      description: 'Smoked cheddar can be added to omelettes, pizza, soufflés, au gratins, fondues, etc., adding a smoky sharpness with every bite.'
     }
   ]);
 
@@ -64,6 +72,8 @@ async function seed() {
     }
   ]);
 
+  //User-Board connections
+
   const user1 = await User.findByPk(1);
   const boards1 = await Board.findAll({
     where: {
@@ -77,13 +87,63 @@ async function seed() {
 
   const user2 = await User.findByPk(2);
   const board2 = await Board.findOne({
+    where: { type: 'Soft cheeses' }
+  });
+  await user2.addBoard(board2);
+
+
+  //Cheese-Board connections
+  const smokyBoard = await Board.findOne({
+    where: { type: 'Smoked cheeses' }
+  });
+
+  const softBoard = await Board.findOne({
+    where: { type: 'Soft cheeses' }
+  });
+
+  const agedBoard = await Board.findOne({
+    where: { type: 'Aged cheeses' }
+  });
+
+
+  const smokyCheeses = await Cheese.findAll({
     where: {
       [Op.or]: [
-        { type: 'Crumbly cheeses' }
+        { title: 'Provolone' },
+        { title: 'Smoked Cheddar' }
       ]
     }
   });
-  await user2.addBoard(board2);
+
+  const softCheeses = await Cheese.findAll({
+    where: {
+      [Op.or]: [
+        { title: 'Brie' },
+        { title: 'Mascarpone' },
+        { title: 'Gorgonzola' }
+      ]
+    }
+  });
+
+  const agedCheeses = await Cheese.findAll({
+    where: {
+      [Op.or]: [
+        { title: 'Gorgonzola' },
+        { title: 'Provolone' },
+        { title: 'Brie' }
+      ]
+    }
+  });
+
+  await smokyBoard.addCheeses(smokyCheeses);
+  await softBoard.addCheeses(softCheeses);
+  await agedBoard.addCheeses(agedCheeses);
+
+  // await cheeses.find(cheese => cheese.title === 'Provolone').addBoards([smokyBoard, agedBoard]);
+  // await cheeses.find(cheese => cheese.title === 'Brie').addBoards([agedBoard, softBoard]);
+  // await cheeses.find(cheese => cheese.title === 'Gorgonzola').addBoards([agedBoard, softBoard]);
+  // await cheeses.find(cheese => cheese.title === 'Smoked Cheddar').addBoard(smokyBoard);
+  // await cheeses.find(cheese => cheese.title === 'Mascarpone').addBoard(softBoard);
 
 }
 
