@@ -3,11 +3,12 @@ const db = require('./db');
 
 class Data {
   
-  static content = new Array();
+  static content;
   static models = ['Board', 'Cheese', 'User'];
   static objs = [Board, Cheese, User];
 
   static async new() {
+    Data.content = new Array();
 
     for (let i = 0; i < Data.models.length; i++) {
       const obj = await Data.objs[i].findAll();
