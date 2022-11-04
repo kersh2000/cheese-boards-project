@@ -1,5 +1,6 @@
 const { Board, Cheese, User } = require('../models/index');
 const db = require('./db');
+const { Op } = require('sequelize')
 
 async function seed() {
 
@@ -7,7 +8,7 @@ async function seed() {
     force: true
   });
 
-  await Board.bulkCreate([
+  const boards = await Board.bulkCreate([
     {
       type: 'Smoked cheeses',
       description: 'Smoked Gouda, Provolone, and Cheddar.',
@@ -25,7 +26,7 @@ async function seed() {
     }
   ]);
 
-  await Cheese.bulkCreate([
+  const cheeses = await Cheese.bulkCreate([
     {
       title: 'Brie',
       description: 'Brie is a soft, white cheese. It comes in a wheel, sometimes in a small wooden box, and is considered a great dessert cheese. '
@@ -52,7 +53,7 @@ async function seed() {
     }
   ]);
 
-  await User.bulkCreate([
+  const users = await User.bulkCreate([
     {
       name: 'Joe Frost',
       email: 'joefrost82@hotmail.com'
@@ -63,6 +64,27 @@ async function seed() {
     }
   ]);
 
+  const user1 = await User.findByPk(1);
+  const boards1 = await Board.findAll({
+    where: {
+      [Op.or]: [
+        { type: 'Smoked cheeses' },
+        { type: 'Aged cheeses' }
+      ]
+    }
+  });
+  await user1.addBoards(boards1);
+
+  const user2 = await User.findByPk(2);
+  const board2 = await Board.findOne({
+    where: {
+      [Op.or]: [
+        { type: 'Crumbly cheeses' }
+      ]
+    }
+  });
+  await user2.addBoard(board2);
+
 }
 
-seed();
+module.exports = seed;
